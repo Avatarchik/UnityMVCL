@@ -56,12 +56,14 @@ public class GameSessionManager : MonoBehaviour {
 		}*/
 		networkManager.StartServer();
 
+		/*
 		GameObject logic = ObjectFactory.SpawnLocal(gameLogicPrefab, transform.position, Quaternion.identity);
 		GameObject view = ObjectFactory.SpawnLocal(gameViewPrefab, transform.position, Quaternion.identity);
 		GameObject model = ObjectFactory.Spawn(gameModelPrefab, transform.position, Quaternion.identity);
 		GameObject controller = ObjectFactory.SpawnLocal(gameControllerPrefab, transform.position, Quaternion.identity);
 		
 		logic.GetComponent<GameLogic>().SetupServer(model.GetComponent<GameModel>(), gameRootClass);
+		*/
 	}
 	
 	public void StartClient() {
@@ -78,8 +80,10 @@ public class GameSessionManager : MonoBehaviour {
 		GameObject model = ObjectFactory.Spawn(gameModelPrefab, transform.position, Quaternion.identity);
 
 		view.GetComponent<GameView>().SetGameModel(model.GetComponent<GameModel>());
-		logic.GetComponent<GameLogic>().SetupLocalGame(model.GetComponent<GameModel>(), gameRootClass);
-
+		logic.GetComponent<GameLogic>().SetupLocalGame(
+			model.GetComponent<GameModel>(),
+			view.GetComponent<GameView>(),
+			gameRootClass);
 	}
 
 	public bool IsConnected() {
@@ -115,7 +119,6 @@ public class GameSessionManager : MonoBehaviour {
 	}
 
 	void JoinServer(string gameName, string[] ip, int port) {
-		string ipAsString = string.Join(".", ip);
 		Debug.Log("Joining name: " + gameName);
 		ObjectFactory.SpawnLocal(gameViewPrefab, transform.position, Quaternion.identity);
 		ObjectFactory.SpawnLocal(gameControllerPrefab, transform.position, Quaternion.identity);
